@@ -1,0 +1,362 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-12-21T20:52:14Z"
+    generateName: classifier-deployment-69dc975787-
+    labels:
+      app: classifier
+      pod-template-hash: 69dc975787
+    name: classifier-deployment-69dc975787-cw4m8
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: classifier-deployment-69dc975787
+      uid: 391aa4a0-511b-4f73-8710-16775e6820c9
+    resourceVersion: "1600"
+    uid: 870cca4a-5bd8-46e6-a908-d14f28cd453e
+  spec:
+    containers:
+    - image: muthukamalan/dog-breeds-classifier:latest
+      imagePullPolicy: Always
+      name: classifier
+      ports:
+      - containerPort: 7860
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-khlmd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minikube
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-khlmd
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-12-21T20:52:19Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-12-21T20:52:14Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-12-21T20:52:19Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-12-21T20:52:19Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-12-21T20:52:14Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://0c876facb2ed3e2ab474e45d1630e17a9a3ec685960f3d6937b77d978c56fc35
+      image: muthukamalan/dog-breeds-classifier:latest
+      imageID: docker-pullable://muthukamalan/dog-breeds-classifier@sha256:3b674ec5df8fadf8fb182ef0734248a4a56a160c9b80a77bf28376a07f0d1f99
+      lastState: {}
+      name: classifier
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2024-12-21T20:52:19Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-khlmd
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    phase: Running
+    podIP: 10.244.0.9
+    podIPs:
+    - ip: 10.244.0.9
+    qosClass: BestEffort
+    startTime: "2024-12-21T20:52:14Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"classifier-service","namespace":"default"},"spec":{"ports":[{"port":80,"protocol":"TCP","targetPort":7860}],"selector":{"app":"classifier"}}}
+    creationTimestamp: "2024-12-21T20:34:02Z"
+    name: classifier-service
+    namespace: default
+    resourceVersion: "534"
+    uid: a5d1a950-e22d-4041-8e28-d85d31cd53d8
+  spec:
+    clusterIP: 10.98.124.114
+    clusterIPs:
+    - 10.98.124.114
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 7860
+    selector:
+      app: classifier
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2024-12-21T20:30:28Z"
+    labels:
+      component: apiserver
+      provider: kubernetes
+    name: kubernetes
+    namespace: default
+    resourceVersion: "203"
+    uid: 7ba7854c-1ec9-484b-b0a5-949f6c2f411e
+  spec:
+    clusterIP: 10.96.0.1
+    clusterIPs:
+    - 10.96.0.1
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "3"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"classifier-app"},"name":"classifier-deployment","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"classifier"}},"template":{"metadata":{"labels":{"app":"classifier"}},"spec":{"containers":[{"image":"muthukamalan/dog-breeds-classifier:latest","name":"classifier","ports":[{"containerPort":7860}]}]}}}}
+    creationTimestamp: "2024-12-21T20:43:29Z"
+    generation: 4
+    labels:
+      app: classifier-app
+    name: classifier-deployment
+    namespace: default
+    resourceVersion: "1614"
+    uid: 0a2354b5-f360-419d-86d2-101c0c0c9394
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: classifier
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: classifier
+      spec:
+        containers:
+        - image: muthukamalan/dog-breeds-classifier:latest
+          imagePullPolicy: Always
+          name: classifier
+          ports:
+          - containerPort: 7860
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-12-21T20:44:31Z"
+      lastUpdateTime: "2024-12-21T20:44:31Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2024-12-21T20:43:29Z"
+      lastUpdateTime: "2024-12-21T20:52:19Z"
+      message: ReplicaSet "classifier-deployment-69dc975787" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "3"
+      deployment.kubernetes.io/revision-history: "1"
+    creationTimestamp: "2024-12-21T20:43:29Z"
+    generation: 4
+    labels:
+      app: classifier
+      pod-template-hash: 69dc975787
+    name: classifier-deployment-69dc975787
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: classifier-deployment
+      uid: 0a2354b5-f360-419d-86d2-101c0c0c9394
+    resourceVersion: "1603"
+    uid: 391aa4a0-511b-4f73-8710-16775e6820c9
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: classifier
+        pod-template-hash: 69dc975787
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: classifier
+          pod-template-hash: 69dc975787
+      spec:
+        containers:
+        - image: muthukamalan/dog-breeds-classifier:latest
+          imagePullPolicy: Always
+          name: classifier
+          ports:
+          - containerPort: 7860
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2024-12-21T20:48:38Z"
+    generation: 2
+    labels:
+      app: classifier
+      pod-template-hash: 6cbcc458f4
+    name: classifier-deployment-6cbcc458f4
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: classifier-deployment
+      uid: 0a2354b5-f360-419d-86d2-101c0c0c9394
+    resourceVersion: "1613"
+    uid: 89be28b1-6f44-4299-8687-30196b2ea2be
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: classifier
+        pod-template-hash: 6cbcc458f4
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: classifier
+          pod-template-hash: 6cbcc458f4
+      spec:
+        containers:
+        - image: muthukamalan/dog-breeds-classifier
+          imagePullPolicy: Always
+          name: classifier
+          ports:
+          - containerPort: 7860
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+kind: List
+metadata:
+  resourceVersion: ""
