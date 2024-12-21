@@ -1,0 +1,66 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: classifier-deployment
+    labels:
+        app: classifier-app
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: classifier
+    template:
+        metadata:
+            labels:
+                app: classifier
+        spec:
+            containers:
+                - name: classifier
+                  image: muthukamalan/dog-breeds-classifier:latest
+                #   imagePullPolicy: Never
+                  ports:
+                      - containerPort: 7860
+
+---
+
+
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+    name: classifier-service
+spec:
+    selector:
+        app: classifier
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 7860
+
+
+---
+
+# INGRESS
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: classifier-ingress
+    annotations:
+        nginx.ingress.kubernetes.io/affinity: "cookie"
+        nginx.ingress.kubernetes.io/affinity-mode: "balanced"
+        nginx.ingress.kubernetes.io/session-cookie-name: "INGRESSCOOKIE"
+        nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+        nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+spec:
+    rules:
+        - host: localhost
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: classifier-service
+                            port:
+                                number: 80
